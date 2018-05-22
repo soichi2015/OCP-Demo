@@ -7,11 +7,17 @@
   - name: "Project切り替え"
     shell: oc project pipeline-${GUID}-dev
 
-#  - name: "Testへアプリケーションをリリース"
-#    shell: oc new-app pipeline-${GUID}-dev/cotd:testready --name=cotd -n pipeline-${GUID}-test
+  - name: "image streamタグ付け-DEV"
+    shell: "oc tag cotd:latest cotd:testready -n pipeline-${GUID}-dev"
 
-#  - name: "Prodへアプリケーションをリリース"
-#    shell: oc new-app pipeline-${GUID}-dev/cotd:prodready --name=cotd -n pipeline-${GUID}-prod
+  - name: "image streamタグ付け-Prod"
+    shell: "oc tag cotd:testready cotd:prodready -n pipeline-${GUID}-dev"
+
+  - name: "Testへアプリケーションをリリース"
+    shell: oc new-app pipeline-${GUID}-dev/cotd:testready --name=cotd -n pipeline-${GUID}-test
+
+  - name: "Prodへアプリケーションをリリース"
+    shell: oc new-app pipeline-${GUID}-dev/cotd:prodready --name=cotd -n pipeline-${GUID}-prod
 
   - name: "automatic deploymentを無効化-Dev"
     shell: "oc get dc cotd -o yaml -n pipeline-${GUID}-dev | sed 's/automatic: true/automatic: false/g' | oc replace -f -"
@@ -25,11 +31,11 @@
   - name: "サービス公開-Dev"
     shell: oc expose service cotd -n pipeline-${GUID}-dev
 
-#  - name: "サービス公開-Test"
-#    shell: oc expose service cotd -n pipeline-${GUID}-test
+  - name: "サービス公開-Test"
+    shell: oc expose service cotd -n pipeline-${GUID}-test
 
-#  - name: "サービス公開-Prod"
-#    shell: oc expose service cotd -n pipeline-${GUID}-prod
+  - name: "サービス公開-Prod"
+    shell: oc expose service cotd -n pipeline-${GUID}-prod
 
   - name: "パイプラインビルド定義"
     shell: oc create -f pipeline-demo
