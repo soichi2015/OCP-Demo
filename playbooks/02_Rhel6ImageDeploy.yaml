@@ -18,7 +18,8 @@
   - name: "Build"
     shell: cat Dockerfile | oc new-build --dockerfile=- --to=sleep
 
-  - name: "log確認"
-    shell: oc logs sleep-1-build -f
+  - name: wait for the server to come up
+    local_action: wait_for delay=10
 
-
+  - name: "アプリケーション作成"
+    shell: oc new-app sleep
