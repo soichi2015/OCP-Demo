@@ -25,11 +25,11 @@
   - name: "サービス公開-Dev"
     shell: oc expose service cotd -n pipeline-${GUID}-dev
 
-  - name: "サービス公開-Test"
-    shell: oc expose service cotd -n pipeline-${GUID}-test
+#  - name: "サービス公開-Test"
+#    shell: oc expose service cotd -n pipeline-${GUID}-test
 
-  - name: "サービス公開-Prod"
-    shell: oc expose service cotd -n pipeline-${GUID}-prod
+#  - name: "サービス公開-Prod"
+#    shell: oc expose service cotd -n pipeline-${GUID}-prod
 
   - name: "パイプラインビルド定義"
     shell: oc create -f pipeline-demo
