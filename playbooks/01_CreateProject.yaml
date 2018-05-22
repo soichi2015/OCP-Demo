@@ -1,0 +1,23 @@
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    master_config : /etc/origin/master/master-config.yaml
+    htpasswd : /etc/origin/master/htpasswd
+    admin_user : oscadm
+    admin_passwd : r3dh4t1!
+    common_passwd : redhat1!
+    users: 
+       - { name: "{{ admin_user }}" , passwd: "{{ admin_passwd }}" }
+       - { name: 'andrew', passwd: "{{ common_passwd }}" }
+       - { name: 'karla', passwd : "{{ common_passwd }}" }
+
+  tasks:
+　- name: branch
+  　pause:
+    　prompt: "OCPのログインパスワードを入力"
+  　register: branch_input
+
+  - name: login OCP
+    shell: "oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}""
+
