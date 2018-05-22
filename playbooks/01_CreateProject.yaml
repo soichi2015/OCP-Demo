@@ -7,17 +7,43 @@
     admin_user : oscadm
     admin_passwd : r3dh4t1!
     common_passwd : redhat1!
-    users: 
+    users:
        - { name: "{{ admin_user }}" , passwd: "{{ admin_passwd }}" }
        - { name: 'andrew', passwd: "{{ common_passwd }}" }
        - { name: 'karla', passwd : "{{ common_passwd }}" }
 
   tasks:
-　- name: branch
-  　pause:
-    　prompt: "OCPのログインパスワードを入力"
-  　register: branch_input
+  - name: branch
+    pause:
+     prompt: "OCPのログインパスワードを入力"
+    register: branch_input
 
-  - name: login OCP
-    shell: "oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}""
+  - name: "login OCP"
+    shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}"
 
+  - name: "Project 作成-Dev"
+    shell: oc new-project pipeline-${GUID}-dev --display-name="Cat Of The Day - Dev"
+
+  - name: "Project 作成-Test"
+    shell: oc new-project pipeline-${GUID}-test --display-name="Cat Of The Day - Test"
+
+  - name: "Project 作成-Prod"
+    shell: oc new-project pipeline-${GUID}-prod --display-name="Cat Of The Day - Prod"
+
+  - name: "Jenkins準備"
+    shell: oc new-app jenkins-persistent -n pipeline-${GUID}-dev
+
+  - name: "権限設定-Test"
+    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-${GUID}-dev:jenkins -n pipeline-${GUID}-test
+
+  - name: "権限設定-Prod"
+    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-${GUID}-dev:jenkins -n pipeline-${GUID}-prod  
+
+  - name: "Test/Prod環境から、Dev環境のImageをpullできるようにする(1)"
+    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-${GUID}-test -n pipeline-${GUID}-dev
+
+  - name: "Test/Prod環境から、Dev環境のImageをpullできるようにする(2)"
+    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-${GUID}-prod -n pipeline-${GUID}-dev
+
+  - name: "アプリケーションデプロイ"
+    shell: oc new-app https://github.com/soichi2015/cotd-master.git -n pipeline-${GUID}-dev
