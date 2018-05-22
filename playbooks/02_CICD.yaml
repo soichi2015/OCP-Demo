@@ -11,13 +11,13 @@
     shell: oc new-app pipeline-${GUID}-dev/cotd:prodready --name=cotd -n pipeline-${GUID}-prod
 
   - name: "automatic deploymentを無効化-Dev"
-    shell: oc get dc cotd -o yaml -n pipeline-${GUID}-dev | sed 's/automatic: true/automatic: false/g' | oc replace -f -
+    shell: "oc get dc cotd -o yaml -n pipeline-${GUID}-dev | sed 's/automatic: true/automatic: false/g' | oc replace -f -"
 
   - name: "automatic deploymentを無効化-Test"
-    shell: oc get dc cotd -o yaml -n pipeline-${GUID}-test | sed 's/automatic: true/automatic: false/g' | oc replace -f -
+    shell: "oc get dc cotd -o yaml -n pipeline-${GUID}-test | sed 's/automatic: true/automatic: false/g' | oc replace -f -"
 
   - name: "automatic deploymentを無効化-Prod"
-    shell: oc get dc cotd -o yaml -n pipeline-${GUID}-prod | sed 's/automatic: true/automatic: false/g' | oc replace -f -
+    shell: "oc get dc cotd -o yaml -n pipeline-${GUID}-prod | sed 's/automatic: true/automatic: false/g' | oc replace -f -"
 
   - name: "サービス公開-Dev"
     shell: oc expose service cotd -n pipeline-${GUID}-dev
