@@ -28,25 +28,5 @@
   - name: "サービス公開-Prod"
     shell: oc expose service cotd -n pipeline-${GUID}-prod
 
-  - name: "----"
-    shell: oc create -f 
-
-  - name: "権限設定-Prod"
-    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-${GUID}-dev:jenkins -n pipeline-${GUID}-prod  
-
-  - name: "Test/Prod環境から、Dev環境のImageをpullできるようにする(1)"
-    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-${GUID}-test -n pipeline-${GUID}-dev
-
-  - name: "Test/Prod環境から、Dev環境のImageをpullできるようにする(2)"
-    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-${GUID}-prod -n pipeline-${GUID}-dev
-
-  - name: "Jenkinsの起動まち"
-    shell: curl -o /dev/null -w %{http_code} https://jenkins-pipeline-${GUID}-dev.apps.na37.openshift.opentlc.com 2> /dev/null
-    register: result
-    until: result.stdout.find('200') != -1
-    retries: 6
-    delay: 20
-
-  - name: "アプリケーションデプロイ"
-    shell: oc new-app https://github.com/soichi2015/cotd.git -n pipeline-${GUID}-dev
-
+  - name: "パイプラインビルド定義"
+    shell: oc create -f pipeline-demo
