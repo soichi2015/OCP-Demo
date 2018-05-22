@@ -4,6 +4,9 @@
   vars:
 
   tasks:
+  - name: "Project切り替え"
+    shell: oc project pipeline-${GUID}-dev
+
   - name: "Testへアプリケーションをリリース"
     shell: oc new-app pipeline-${GUID}-dev/cotd:testready --name=cotd -n pipeline-${GUID}-test
 
