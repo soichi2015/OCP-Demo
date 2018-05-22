@@ -1,0 +1,24 @@
+- hosts: localhost
+  remote_user: root
+
+  vars:
+
+  tasks:
+  - name: branch
+    pause:
+     prompt: "OCPのログインパスワードを入力"
+    register: branch_input
+
+  - name: "login OCP"
+    shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}"
+
+  - name: "Project 作成"
+    shell: oc new-project test-dockerbuild
+
+  - name: "Build"
+    shell: cat Dockerfile | oc new-build --dockerfile=- --to=sleep
+
+  - name: "log確認"
+    shell: oc logs sleep-1-build -f
+
+
