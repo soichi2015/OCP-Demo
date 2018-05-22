@@ -13,7 +13,7 @@
     shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}"
 
   - name: "Project 作成"
-    shell: oc new-project test-dockerbuild
+    shell: oc new-project demo-${GUID}
 
   - name: "Build"
     shell: cat Dockerfile | oc new-build --dockerfile=- --to=sleep
