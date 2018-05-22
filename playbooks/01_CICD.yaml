@@ -40,7 +40,7 @@
     shell: curl -o /dev/null -w %{http_code} https://jenkins-pipeline-${GUID}-dev.apps.na37.openshift.opentlc.com 2> /dev/null
     register: result
     until: result.stdout.find('200') != -1
-    retries: 6
+    retries: 10
     delay: 20
 
   - name: "アプリケーションデプロイ"
