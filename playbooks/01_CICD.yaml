@@ -40,8 +40,8 @@
     shell: curl -o /dev/null -w %{http_code} https://jenkins-pipeline-${GUID}-dev.apps.na37.openshift.opentlc.com 2> /dev/null
     register: result
     until: result.stdout.find('200') != -1
-    retries: 10
-    delay: 20
+    retries: 15
+    delay: 30
 
   - name: "アプリケーションデプロイ"
     shell: oc new-app https://github.com/soichi2015/cotd.git -n pipeline-${GUID}-dev
