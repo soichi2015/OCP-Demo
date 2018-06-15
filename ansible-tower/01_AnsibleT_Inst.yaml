@@ -16,10 +16,13 @@
     shell: oc new-project ansible-tower-${GUID}
 
   - name: "Build"
-    shell: cat Dockerfile | oc new-build --dockerfile=- --to=AnsibleTower
+    shell: cat Dockerfile | oc new-build --strategy docker --binary --name ansibletower
+
+  - name: "NewBild Start"
+    shell: oc start-build ansibletower --from-dir . --follow
 
   - name: wait for the server to come up
     local_action: wait_for delay=10
 
   - name: "アプリケーション作成"
-    shell: oc new-app AnsibleTower
+    shell: oc new-app ansibletower

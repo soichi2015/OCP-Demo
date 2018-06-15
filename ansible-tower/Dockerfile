@@ -15,13 +15,13 @@ RUN locale-gen "en_US.UTF-8" \
 	&& dpkg-reconfigure locales
 
 # Use python >= 2.7.9
-RUN apt-get install -y software-properties-common \
-	&& apt-add-repository -y ppa:fkrull/deadsnakes-python2.7 \
-	&& apt-key adv --keyserver keyserver.ubuntu.com --recv 5BB92C09DB82666C \
-	&& apt-get update
-	
+#RUN apt-get install -y software-properties-common \
+#	&& apt-add-repository -y ppa:fkrull/deadsnakes-python2.7 \
+#	&& apt-key adv --keyserver keyserver.ubuntu.com --recv 5BB92C09DB82666C \
+#	&& apt-get update
+
 # Install libpython2.7; missing dependency in Tower setup
-RUN apt-get install -y libpython2.7
+RUN yum install -y python27u python27u-libs python27u-devel
 
 # create /var/log/tower
 RUN mkdir -p /var/log/tower
