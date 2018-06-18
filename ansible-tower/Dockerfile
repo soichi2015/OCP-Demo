@@ -7,12 +7,20 @@ ENV ANSIBLE_TOWER_VER 3.2.5
 ENV PG_DATA /var/lib/postgresql/9.6/main
 ENV AWX_PROJECTS /var/lib/awx/projects
 
-RUN apt-get update
+RUN yum -y update
 
 # Set locale
-RUN locale-gen "en_US.UTF-8" \
-	&& export LC_ALL="en_US.UTF-8" \
-	&& dpkg-reconfigure locales
+RUN yum clean all
+RUN rm -f /etc/rpm/macros.image-language-conf && \
+      sed -i '/^override_install_langs=/d' /etc/yum.conf && \
+      yum -y reinstall glibc-common
+env LANG=ja_JP.UTF-8 \
+    LANGUAGE="ja_JP:ja" \
+    LC_ALL="ja_JP.UTF-8"
+RUN yum -y reinstall tzdata && \
+    yum -y install yum-langpacks system-config-language &&
+    ln -snf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    sed -ri 's/en_US/ja_JP/' /etc/locale.conf
 
 # Use python >= 2.7.9
 #RUN apt-get install -y software-properties-common \
