@@ -2,6 +2,8 @@
   remote_user: root
 
   vars:
+    ocp_id: na39
+    GUID: abc2
 
   tasks:
   - name: branch
@@ -10,16 +12,16 @@
     register: branch_input
 
   - name: "login OCP"
-    shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}"
+    shell: oc login https://master.{{ocp_id}}.openshift.opentlc.com -u sanzai-redhat.com -p {{ branch_input.user_input }}
 
-  - name: "Project 作成"
-    shell: oc new-project demo-${GUID}
+  - name: "Create project"
+    shell: oc new-project demo-{{GUID}} --display-name="demo-{{GUID}}"
 
   - name: "Build"
-    shell: cat Dockerfile | oc new-build --dockerfile=- --to=sleep
+    shell: cat Dockerfile | oc new-build --dockerfile=- --to=rhel6image
 
   - name: wait for the server to come up
     local_action: wait_for delay=10
 
-  - name: "アプリケーション作成"
-    shell: oc new-app sleep
+  - name: "Create application"
+    shell: oc new-app rhel6image
