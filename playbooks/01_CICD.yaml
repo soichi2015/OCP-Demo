@@ -2,6 +2,7 @@
   remote_user: root
 
   vars:
+   GUID: 9e88
 
   tasks:
   - name: branch
@@ -10,39 +11,38 @@
     register: branch_input
 
   - name: "login OCP"
-    shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p "{{ branch_input.user_input }}"
+    shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p {{ branch_input.user_input }}
 
   - name: "Project 作成-Dev"
-    shell: oc new-project pipeline-${GUID}-dev --display-name="Cat Of The Day - Dev"
+    shell: oc new-project pipeline-{{GUID}}-dev --display-name="Cat Of The Day - Dev"
 
   - name: "Project 作成-Test"
-    shell: oc new-project pipeline-${GUID}-test --display-name="Cat Of The Day - Test"
+    shell: oc new-project pipeline-{{GUID}}-test --display-name="Cat Of The Day - Test"
 
   - name: "Project 作成-Prod"
-    shell: oc new-project pipeline-${GUID}-prod --display-name="Cat Of The Day - Prod"
+    shell: oc new-project pipeline-{{GUID}}-prod --display-name="Cat Of The Day - Prod"
 
   - name: "Jenkins準備"
-    shell: oc new-app jenkins-persistent -n pipeline-${GUID}-dev
+    shell: oc new-app jenkins-persistent -n pipeline-{{GUID}}-dev
 
   - name: "権限設定-Test"
-    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-${GUID}-dev:jenkins -n pipeline-${GUID}-test
+    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-{{GUID}}-dev:jenkins -n pipeline-{{GUID}}-test
 
   - name: "権限設定-Prod"
-    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-${GUID}-dev:jenkins -n pipeline-${GUID}-prod  
+    shell: oc policy add-role-to-user edit system:serviceaccount:pipeline-{{GUID}}-dev:jenkins -n pipeline-{{GUID}}-prod
 
   - name: "Test/Prod環境から、Dev環境のImageをpullできるようにする(1)"
-    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-${GUID}-test -n pipeline-${GUID}-dev
+    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-{{GUID}}-test -n pipeline-{{GUID}}-dev
 
   - name: "Test/Prod環境から、Dev環境のImageをpullできるようにする(2)"
-    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-${GUID}-prod -n pipeline-${GUID}-dev
+    shell: oc policy add-role-to-group system:image-puller system:serviceaccounts:pipeline-{{GUID}}-prod -n pipeline-{{GUID}}-dev
 
   - name: "Jenkinsの起動まち"
-    shell: curl -o /dev/null -w %{http_code} https://jenkins-pipeline-${GUID}-dev.apps.na37.openshift.opentlc.com 2> /dev/null
+    shell: curl -o /dev/null -w %{http_code} https://jenkins-pipeline-{{GUID}}-dev.apps.na37.openshift.opentlc.com 2> /dev/null
     register: result
     until: result.stdout.find('200') != -1
     retries: 15
     delay: 30
 
   - name: "アプリケーションデプロイ"
-    shell: oc new-app https://github.com/soichi2015/cotd.git -n pipeline-${GUID}-dev
-
+    shell: oc new-app https://github.com/soichi2015/cotd.git -n pipeline-{{GUID}}-dev
