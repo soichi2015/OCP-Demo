@@ -11,7 +11,7 @@
     register: branch_input
 
   - name: "login OCP"
-    shell: oc login https://master.na37.openshift.opentlc.com -u sanzai-redhat.com -p {{ branch_input.user_input }}
+    shell: oc login https://master.na39.openshift.opentlc.com -u sanzai-redhat.com -p {{ branch_input.user_input }}
 
   - name: "Project 作成-Dev"
     shell: oc new-project pipeline-{{GUID}}-dev --display-name="Cat Of The Day - Dev"

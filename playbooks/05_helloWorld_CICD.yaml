@@ -2,7 +2,7 @@
   remote_user: root
 
   vars:
-    GUID: abc2
+    GUID: 9e88
 
   tasks:
   - name: "Project切り替え"
@@ -34,10 +34,6 @@
 
   - name: "automatic deploymentを無効化-Prod"
     shell: "oc get dc helloworld -o yaml -n pipeline-{{GUID}}-prod | sed 's/automatic: true/automatic: false/g' | oc replace -f -"
-    ignore_errors: yes
-
-  - name: "サービス公開-Dev"
-    shell: oc expose service helloworld -n pipeline-{{GUID}}-dev
     ignore_errors: yes
 
   - name: "サービス公開-Test"
