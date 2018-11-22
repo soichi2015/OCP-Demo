@@ -3,6 +3,7 @@
 
   vars:
     GUID: 9e88
+    Ver311: https://master.rhpds311.openshift.opentlc.com:443
 
   tasks:
   - name: "Project切り替え"
