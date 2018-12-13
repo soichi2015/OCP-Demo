@@ -1,0 +1,10 @@
+---
+
+  jdk_rpm: /tmp/src/jdk-7u11-linux-x64.rpm
+  ver311_rhpds: https://master.rhpds311.openshift.opentlc.com:443
+  ver309_na: https://master.na39.openshift.opentlc.com
+  ver311_na: https://master.na311.openshift.opentlc.com
+  dom311_rhpds: apps.rhpds311.openshift.opentlc.com
+  dom309_na: apps.na37.openshift.opentlc.com
+  dom311_na: apps.na311.openshift.opentlc.com
+  GUID: 9e88

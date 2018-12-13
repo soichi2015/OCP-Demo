@@ -9,5 +9,5 @@
     shell: oc project pipeline-{{GUID}}-dev
 
   - name: "New App 作成"
-    shell: "oc new-app --template=eap71-basic-s2i -p SOURCE_REPOSITORY_URL=https://github.com/soichi2015/jboss-eap-quickstarts-7.1.x-develop.git -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR="/Helloworld-web" -p APPLICATION_NAME=helloworld"
+    shell: "oc new-app --template=eap70-basic-s2i -p SOURCE_REPOSITORY_URL=https://github.com/soichi2015/jboss-eap-quickstarts-7.1.x-develop.git -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR="/Helloworld-webOrg" -p APPLICATION_NAME=helloworld-org"
     ignore_errors: yes
