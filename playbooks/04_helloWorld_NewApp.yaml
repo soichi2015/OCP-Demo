@@ -8,6 +8,10 @@
   - name: "Project切り替え"
     shell: oc project pipeline-{{GUID}}-dev
 
-  - name: "New App 作成"
-    shell: "oc new-app --template=eap70-basic-s2i -p SOURCE_REPOSITORY_URL=https://github.com/soichi2015/jboss-eap-quickstarts-7.1.x-develop.git -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR="/Helloworld-webOrg" -p APPLICATION_NAME=helloworld-org"
+  - name: "New App (HelloWorld)作成"
+    shell: 'oc new-app --template=eap71-basic-s2i -p SOURCE_REPOSITORY_URL=https://github.com/soichi2015/jboss-eap-quickstarts-7.1.x-develop.git -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR="/Helloworld-web" -p APPLICATION_NAME=helloworld'
+    ignore_errors: yes
+
+  - name: "New App (HelloWorld-org)作成"
+    shell: 'oc new-app --template=eap71-basic-s2i -p SOURCE_REPOSITORY_URL=https://github.com/soichi2015/jboss-eap-quickstarts-7.1.x-develop.git -p SOURCE_REPOSITORY_REF=master -p CONTEXT_DIR="/Helloworld-webOrg" -p APPLICATION_NAME=helloworld-org'
     ignore_errors: yes

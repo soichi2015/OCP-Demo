@@ -54,4 +54,4 @@
     delay: 30
 
   - name: "アプリケーションデプロイ"
-    shell: oc new-app https://github.com/soichi2015/cotd.git -n pipeline-{{GUID}}-dev
+    shell: oc new-app https://github.com/soichi2015/cotd.git -n pipeline-{{ GUID }}-dev

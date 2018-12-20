@@ -2,8 +2,8 @@
   remote_user: root
 
   vars:
-    ocp_id: na39
-    GUID: abc2
+    ocp_id: na311
+    GUID: 20181213
 
   tasks:
   - name: branch
@@ -15,7 +15,7 @@
     shell: oc login https://master.{{ocp_id}}.openshift.opentlc.com -u sanzai-redhat.com -p {{ branch_input.user_input }}
 
   - name: "Create project"
-    shell: oc new-project demo-{{GUID}} --display-name="demo-{{GUID}}"
+    shell: oc project demo-{{GUID}}
 
   - name: "Build"
     shell: cat Dockerfile | oc new-build --dockerfile=- --to=rhel6image
