@@ -1,0 +1,18 @@
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    GUID: demo-20190529
+
+  tasks:
+  - name: "Project切り替え"
+    shell: oc project demo-20190529
+
+  - name: "Set up a PostgreSQL Database"
+    shell: 'oc new-app -e POSTGRESQL_USER=user -e POSTGRESQL_PASSWORD=mypassword -e POSTGRESQL_DATABASE=sampledb postgresql:9.5'
+    ignore_errors: yes
+
+  - name: "secret作成"
+    shell: 'oc create -f /Users/sanzai/Documents/1_RedHat関連/製品/JDV/DataIntegration/teiid-openshift-examples-master/secret.yaml'
+    ignore_errors: yes
+

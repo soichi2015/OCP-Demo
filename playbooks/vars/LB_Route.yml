@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Route
+metadata:
+  name: helloworld-cluster
+spec:
+  alternateBackends:
+    - kind: Service
+      name: helloworld-org
+      weight: 100
+  host: helloworld-cluster-pipeline-9e88-dev.apps.na311.openshift.opentlc.com
+  path: "/Helloworld-web"
+  to:
+    kind: Service
+    name: helloworld
+    weight: 0
