@@ -1,0 +1,26 @@
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    ocp_url: https://api.cluster-tokyo-6eb4.tokyo-6eb4.example.opentlc.com:6443
+    ocp_client: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3
+
+  tasks:
+  - name: branch
+    pause:
+     prompt: "OCPのログインパスワードを入力"
+    register: branch_input
+
+  - name: "Login to OpenShift"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc login -u opentlc-mgr -p {{ branch_input.user_input }} {{ ocp_url }}
+
+  - name: "Operator Install"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc apply -f ServiceMesh
+    ignore_errors: yes
+
+  - name: "Project作成"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc new-project istio-system
+    ignore_errors: yes
+
+  - name: "istio-system デプロイ"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc apply -f　istio-system
