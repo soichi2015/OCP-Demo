@@ -1,0 +1,32 @@
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    ocp_url: https://api.cluster-tokyo-6eb4.tokyo-6eb4.example.opentlc.com:6443
+    ocp_client: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3
+
+  tasks:
+  - name: branch
+    pause:
+     prompt: "OCPのログインパスワードを入力"
+    register: branch_input
+
+  - name: "Login to OpenShift"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc login -u opentlc-mgr -p {{ branch_input.user_input }} {{ ocp_url }}
+
+  - name: "Create Project"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc new-project bookinfo
+    ignore_errors: yes
+
+  - name: "Project切り替え"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc project bookinfo
+    ignore_errors: yes
+
+  - name: "bookinfoをデプロイ"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc apply -n bookinfo -f https://raw.githubusercontent.com/Maistra/bookinfo/maistra-1.0/bookinfo.yaml
+
+  - name: "Ingress ゲートウェイを作成"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc apply -n bookinfo -f https://raw.githubusercontent.com/Maistra/bookinfo/maistra-1.0/bookinfo-gateway.yaml
+
+  - name: "デフォルトの宛先ルールの追加"
+    shell: /Users/sanzai/Documents/1_RedHat関連/製品/OpenShift/OC_Clients/oc-4.3/oc apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.1/samples/bookinfo/networking/destination-rule-all.yaml
